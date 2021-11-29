@@ -11,27 +11,29 @@ namespace LiftOff_Project.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
+        private Dbcontext context;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(DbContext dbContext)
         {
-            _logger = logger;
+            context = dbContext;
         }
 
         public IActionResult Index()
         {
-            return View();
+            List<Service> services = context.Services.Include(s => s.Provider).ToList();
+
+            return View(services);
         }
 
-        public IActionResult Privacy()
-        {
-            return View();
-        }
+      
+        public IActionResult Detail(int id)
+       
+            Service theService = context.Services
+                .Include(s => s.Provider)
+                .Single(s => s.Id == id);
 
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            ServiceDetailViewModel viewModel = new ServiceDetailViewModel(theService);
+            return View(viewModel);
         }
     }
 }
