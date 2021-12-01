@@ -86,7 +86,30 @@ namespace LiftOff_Project.Controllers
                         displayServices.Add(newDisplayService);
                     }
                 }
+                else if(searchType == "location")
+                {
+                    services = context.Services
+                        .Include(s => s.Location)
+                        .Where(s => s.Location.ToString() == searchTerm)
+                        .ToList();
+
+                    foreach(Service service in services)
+                    {
+                        List<ServiceTag> serviceTags = context.ServiceTags
+                            .Where(st => st.ServiceId == service.Id)
+                            .Include(st => st.Tag)
+                            .ToList();
+
+                        ServiceDetailViewModel newDisplayService = new ServiceDetailViewModel(service, serviceTags);
+                        displayServices.Add(newDisplayService);
+                    }
+                }
             }
+            ViewBag.columns = ListController.ColumnChoices;
+            ViewBag.title = "Jobs with " + ListController.ColumnChoices[searchType] + ": " + searchTerm;
+            ViewBag.services = displayServices;
+
+            return View("Index");
         }
     }
 }

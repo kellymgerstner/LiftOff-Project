@@ -1,4 +1,5 @@
-﻿using LiftOff_Project.Models;
+﻿using LiftOff_Project.Data;
+using LiftOff_Project.Models;
 using LiftOff_Project.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -13,9 +14,9 @@ namespace LiftOff_Project.Controllers
 {
     public class HomeController : Controller
     {
-        private Dbcontext context;
+        private ServiceDbContext context;
 
-        public HomeController(DbContext dbContext)
+        public HomeController(ServiceDbContext dbContext)
         {
             context = dbContext;
         }

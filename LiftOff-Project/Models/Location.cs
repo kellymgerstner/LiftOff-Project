@@ -5,20 +5,20 @@ using System.Threading.Tasks;
 
 namespace LiftOff_Project.Models
 {
-    public class Provider
+    public class Location
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public Location Location { get; set; }
+        public string Address { get; set; }
 
-        public Provider()
-        {
-        }
-
-        public Provider(string name, Location location)
+        public Location (string name, string address)
         {
             Name = name;
-            Location = location;
+            Address = address;
+        }
+
+        public Location()
+        {
         }
     }
 }

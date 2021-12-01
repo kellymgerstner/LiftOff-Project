@@ -13,7 +13,8 @@ namespace LiftOff_Project.Models
         public int ProviderId { get; set; }
         public Category Category { get; set; }
         public int CategoryId { get; set; }
-        public string Location { get; set; }
+        public Location Location { get; set; }
+        public int LocationId { get; set; }
         public string Description { get; set; }
         public List<ServiceTag> ServiceTags { get; set; }
 

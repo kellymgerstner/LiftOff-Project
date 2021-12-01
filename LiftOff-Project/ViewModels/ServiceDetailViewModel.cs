@@ -22,7 +22,7 @@ namespace LiftOff_Project.ViewModels
             Name = theService.Name;
             ProviderName = theService.Provider.Name;
             CategoryName = theService.Category.Name;
-            Location = theService.Location;
+            Location = theService.Location.Name + "/n" + theService.Location.Address;
             Description = theService.Description;
 
             TagText = "";
