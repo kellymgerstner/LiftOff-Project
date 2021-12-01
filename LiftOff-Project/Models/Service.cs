@@ -14,6 +14,7 @@ namespace LiftOff_Project.Models
         public Category Category { get; set; }
         public int CategoryId { get; set; }
         public string Location { get; set; }
+        public string Description { get; set; }
         public List<ServiceTag> ServiceTags { get; set; }
 
         public Service()

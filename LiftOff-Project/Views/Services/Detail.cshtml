@@ -1,0 +1,32 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+@model LiftOff_Project.ViewModels.ServiceDetailViewModel
+
+<h1>@Model.Name</h1>
+
+<table class="table">
+    <tr>
+        <th>Provider</th>
+        <td>@Model.ProviderName</td>
+    </tr>
+    <tr>
+        <th>Category</th>
+        <td>@Model.CategoryName</td>
+    </tr>
+    <tr>
+        <th>Location</th>
+        <td>@Model.Location</td>
+    </tr>
+    <tr>
+        <th>Description</th>
+        <td>@Model.Description</td>
+    </tr>
+    <tr>
+        <th>Tags</th>
+        <td>@Model.TagText</td>
+    </tr>
+</table>
+

@@ -10,42 +10,28 @@ using System.Threading.Tasks;
 
 namespace LiftOff_Project.Controllers
 {
-    public class ListController : Controller
+    public class SearchController : Controller
     {
-        internal static Dictionary<string, string> ColumnChoices = new Dictionary<string, string>()
-        {
-            {"all", "All" },
-            {"provider", "Provider" },
-            {"service", "Service"}
-        };
-
-        internal static List<string> TableChoices = new List<string>()
-        {
-            "provider",
-            "service"
-        };
-
         private ServiceDbContext context;
 
-        public ListController(ServiceDbContext dbcontext)
+        public SearchController(ServiceDbContext dbContext)
         {
-            context = dbcontext;
+            context = dbContext;
         }
+
+        //GET: /<controller>/
         public IActionResult Index()
         {
-            ViewBag.columns = ColumnChoices;
-            ViewBag.tablechoices = TableChoices;
-            ViewBag.providers = context.Providers.ToList();
-            ViewBag.services = context.Services.ToList();
+            ViewBag.columns = ListController.ColumnChoices;
             return View();
         }
 
-        public IActionResult Services(string column, string value)
+        public IActionResult Results(string searchType, string searchTerm)
         {
-            List<Service> services = new List<Service>();
+            List<Service> services;
             List<ServiceDetailViewModel> displayServices = new List<ServiceDetailViewModel>();
 
-            if (column.ToLower().Equals("all"))
+            if (string.IsNullOrEmpty(searchTerm))
             {
                 services = context.Services
                     .Include(s => s.Provider)
@@ -61,15 +47,14 @@ namespace LiftOff_Project.Controllers
                     ServiceDetailViewModel newDisplayService = new ServiceDetailViewModel(service, serviceTags);
                     displayServices.Add(newDisplayService);
                 }
-                ViewBag.title = "All Services";
             }
             else
             {
-                if(column == "provider")
+                if(searchType == "provider")
                 {
                     services = context.Services
                         .Include(s => s.Provider)
-                        .Where(s => s.Provider.Name == value)
+                        .Where(s => s.Provider.Name == searchTerm)
                         .ToList();
 
                     foreach(Service service in services)
@@ -83,33 +68,25 @@ namespace LiftOff_Project.Controllers
                         displayServices.Add(newDisplayService);
                     }
                 }
-                else if(column == "tag")
+                else if (searchType == "category")
                 {
-                    List<ServiceTag> serviceTags = context.ServiceTags
-                        .Where(s => s.Tag.Name == value)
-                        .Include(s => s.Service)
+                    services = context.Services
+                        .Include(s => s.Category)
+                        .Where(s => s.Category.ToString() == searchTerm)
                         .ToList();
 
-                    foreach (var service in serviceTags)
+                    foreach (Service service in services)
                     {
-                        Service foundService = context.Services
-                            .Include(s => s.Provider)
-                            .Single(s => s.Id == service.ServiceId);
-
-                        List<ServiceTag> displayTags = context.ServiceTags
-                            .Where(st => st.ServiceId == foundService.Id)
+                        List<ServiceTag> serviceTags = context.ServiceTags
+                            .Where(st => st.ServiceId == service.Id)
                             .Include(st => st.Tag)
                             .ToList();
 
-                        ServiceDetailViewModel newDisplayService = new ServiceDetailViewModel(foundService, displayTags);
+                        ServiceDetailViewModel newDisplayService = new ServiceDetailViewModel(service, serviceTags);
                         displayServices.Add(newDisplayService);
                     }
                 }
-                ViewBag.title = "Services with " + ColumnChoices[column] + ": " + value;
             }
-            ViewBag.services = displayServices;
-
-            return View();
         }
     }
 }

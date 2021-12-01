@@ -1,0 +1,31 @@
+﻿
+@model List<LiftOff_Project.Models.Service>
+
+<h1>Services</h1>
+
+@if (Model.Count == 0)
+{
+    <p>No services available.</p>
+}
+else
+{
+    <table class="table">
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Provider</th>
+            <th>Category</th>
+            <th>Location</th>
+        </tr>
+        @foreach (var service in Model)
+        {
+            <tr>
+                <td>@service.Id</td>
+                <td><a asp-controller="Services" asp-action="Detail" asp-route-id="@service.Id">@service.Name</a></td>
+                <td>@service.Provider</td>
+                <td>@service.Category </td>
+                <td>@service.Location</td>
+            </tr>
+        }
+    </table>
+}
